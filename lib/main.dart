@@ -4,21 +4,26 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import "toast.dart";
 import "package:firebase_database/firebase_database.dart";
+import 'package:omni_notes/create_acc.dart';
 import 'package:omni_notes/firebase_options.dart';
 import 'notes_disp.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 void updatefirebasedb(col) async {
+  toast("All changes saved!");
   FirebaseDatabase inst = FirebaseDatabase.instance;
   DatabaseReference ref = inst.ref("notes");
-  await ref.set({"data": col});
+  print("update called");
+  print(MyApp.username);
+  print(col);
+  await ref.update({MyApp.username: col});
 }
 
 Future loadfromserver() async {
@@ -29,13 +34,42 @@ Future loadfromserver() async {
   if (snapshot.exists) {
     return snapshot.value;
   } else {
-    print("data could not be fetched!");
-    return [];
+    print(
+        "data could not be fetched! empty dictionary returned possible new user");
+    return {};
+  }
+}
+
+Future check(val, pd) async {
+  FirebaseDatabase inst = FirebaseDatabase.instance;
+  DatabaseReference ref = inst.ref("auth");
+  var snapshot = await ref.get();
+  bool newuser = false;
+  var d;
+  if (snapshot.exists) {
+    d = snapshot.value;
+  } else {
+    d = {};
+  }
+  if (d[val] == null) {
+    newuser = true;
+  }
+
+  if (newuser) {
+    d[val] = pd;
+    ref.update({val: pd});
+    return 1;
+  } else {
+    if (d[val] == pd)
+      return 1;
+    else
+      return 2;
   }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  static String username = '';
 
   // This widget is the root of your application.
   @override
@@ -45,13 +79,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.yellow,
       ),
-      home: const MyHomePage(title: 'Omni notes'),
+      home: MyHomePage(title: 'Omni notes'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -62,25 +96,37 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late int _counter;
   late List<dynamic> col;
+  dynamic timer;
+  late bool timerset;
 
   @override
   void initState() {
     _counter = -1;
-    col=[];
-    Future myfuture = loadfromserver();
-    myfuture.then((value) {
-      setState(() {
-      
-      col = (value["data"] ?? [])  as List<dynamic>;
-      Timer interval =
-          Timer.periodic(const Duration(milliseconds: 500), (timer) {
-        updatefirebasedb(col);
-      });
-        
-      });
-    });
-
+    col = [];
+    timerset = false;
     super.initState();
+  }
+
+  login(val, pwd) {
+    Future fut = check(val, pwd);
+    fut.then(((resp) {
+      if (resp == 1) {
+        toast("Welcome back, $val !");
+        setState(() {
+          MyApp.username = val;
+        });
+        Future myfuture = loadfromserver();
+        myfuture.then((value) {
+          setState(() {
+            col = (value[MyApp.username] ?? []) as List<dynamic>;
+          });
+        });
+      } else if (resp == 2) {
+        toast("incorrect password");
+      } else {
+        toast("error connecting to database!");
+      }
+    }));
   }
 
   newnote() {
@@ -92,6 +138,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   updatenote(ind, val) {
     col[ind] = val;
+    if (timerset) timer.cancel();
+    timer = Timer(Duration(seconds: 2), () {
+      updatefirebasedb(col);
+      
+      timerset = false;
+    });
+    timerset = true;
   }
 
   @override
@@ -103,20 +156,55 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Your notes',
+      body: MyApp.username != ''
+          ? SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Text(
+                            'Your notes',
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(20),
+                          child: TextButton.icon(
+                              onPressed: () {
+                                updatefirebasedb(col);
+                              },
+                              icon: Icon(Icons.save),
+                              label: Text("save")),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(20),
+                          child: TextButton(
+                            child: Text("Change username"),
+                            onPressed: () {
+                              setState(() {
+                                _counter = -1;
+                                col = [];
+                                MyApp.username = '';
+                                if (timerset == true) {
+                                  timerset = false;
+                                  timer.cancel();
+                                }
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                    refreshwidg
+                  ],
+                ),
               ),
-              refreshwidg
-            ],
-          ),
-        ),
-      ),
+            )
+          : CreateAcc(login: login),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           newnote();

@@ -1,5 +1,6 @@
+// ignore_for_file: must_be_immutable
+
 import "package:flutter/material.dart";
-import 'package:flutter/services.dart';
 
 class NotesDisp extends StatefulWidget {
   NotesDisp({required this.col, required this.upd, super.key});
@@ -39,8 +40,7 @@ class _NotesDispState extends State<NotesDisp> {
           widget.tcontrol.add(contr);
 
           handler(val) {
-            
-              widget.upd(i,val);
+            widget.upd(i, val);
 // print(val);
           }
 
@@ -51,7 +51,6 @@ class _NotesDispState extends State<NotesDisp> {
               margin: EdgeInsets.all(30),
               padding: EdgeInsets.all(20),
               child: TextField(
-                
                 controller: contr,
                 textAlign: TextAlign.justify,
                 textAlignVertical: TextAlignVertical.top,
