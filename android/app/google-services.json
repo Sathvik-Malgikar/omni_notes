@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "832415059129",
+    "firebase_url": "https://omni-notes-34205-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "omni-notes-34205",
+    "storage_bucket": "omni-notes-34205.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832415059129:android:4410d70a9585f8a1e09f68",
+        "android_client_info": {
+          "package_name": "com.example.omni_notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "832415059129-t6li9uuetkva4cfh21l4br2jq4ipl6cp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLp5W2TgKDlgdosQQKSkliF_b8mTzAr9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "832415059129-t6li9uuetkva4cfh21l4br2jq4ipl6cp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "832415059129-hg4r0ai4mtpa8daq16qsjon333n10l9a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.omniNotes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
