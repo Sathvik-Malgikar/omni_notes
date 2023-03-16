@@ -3,8 +3,10 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firedart/generated/google/protobuf/empty.pb.dart';
 import 'package:flutter/material.dart';
 import "toast.dart";
+// import "package:firedart/firedart.dart";
 import "package:firebase_database/firebase_database.dart";
 import 'package:omni_notes/create_acc.dart';
 import 'package:omni_notes/firebase_options.dart';
@@ -74,12 +76,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Omni notes',
-      theme: ThemeData(
-        primarySwatch: Colors.yellow,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode nd = FocusScope.of(context);
+        if (!nd.hasPrimaryFocus) {
+          nd.unfocus();
+        }
+      },
+      child: MaterialApp(
+        title: 'Omni notes',
+        theme: ThemeData(
+          primarySwatch: Colors.yellow,
+        ),
+        home: MyHomePage(title: 'Omni notes'),
       ),
-      home: MyHomePage(title: 'Omni notes'),
     );
   }
 }
@@ -141,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (timerset) timer.cancel();
     timer = Timer(Duration(seconds: 2), () {
       updatefirebasedb(col);
-      
+
       timerset = false;
     });
     timerset = true;
@@ -205,13 +215,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             )
           : CreateAcc(login: login),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: MyApp.username!=''? FloatingActionButton(
         onPressed: () {
           newnote();
         },
         tooltip: 'New note',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ):Container(), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

@@ -26,8 +26,12 @@ class CreateAcc extends StatelessWidget {
       return;
     }
     login(username, password);
-    username = '';
+    
     password = '';
+    contr2.text = '';
+    username = '';
+    contr.text = '';
+
   }
 
   @override

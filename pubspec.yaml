@@ -41,15 +41,31 @@ dependencies:
   firebase_database: ^10.0.13
   fluttertoast: ^8.2.1
   flutter_launcher_icons: ^0.12.0
+  firedart: ^0.9.0+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter_icons:
-  android : "launcher_icon"
+  android: "launcher_icon"
   ios: true
-  image_path : "logo.png"
+  image_path: "logo.png"
+  min_sdk_android: 19
+  web:
+    generate: true
+    image_path: "logo.png"
+    background_color: "#ffffff"
+    theme_color: "#00ff11"
+  windows:
+    generate: true
+    image_path: "logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "logo.png"
+  
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
