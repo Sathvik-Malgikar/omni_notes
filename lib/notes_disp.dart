@@ -51,6 +51,7 @@ class _NotesDispState extends State<NotesDisp> {
               margin: EdgeInsets.all(30),
               padding: EdgeInsets.all(20),
               child: TextField(
+                autofocus: true,
                 controller: contr,
                 textAlign: TextAlign.justify,
                 textAlignVertical: TextAlignVertical.top,
