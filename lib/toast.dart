@@ -2,8 +2,15 @@
 
 import "package:flutter/material.dart";
 import "package:fluttertoast/fluttertoast.dart";
+import "package:flutter/foundation.dart" show kIsWeb;
+import "dart:io" show Platform;
 
 toast(msgt) {
+
+
+  if(kIsWeb || !Platform.isWindows)
+  {
+
   Fluttertoast.showToast(
       msg: msgt,
       toastLength: Toast.LENGTH_SHORT,
@@ -12,4 +19,6 @@ toast(msgt) {
       backgroundColor: const Color.fromARGB(255, 86, 75, 247),
       textColor: Colors.white,
       fontSize: 16.0);
+  }
+
 }
