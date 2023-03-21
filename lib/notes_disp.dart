@@ -28,6 +28,9 @@ class _NotesDispState extends State<NotesDisp> {
     for (var i = 0; i < widget.col.length; i++) {
       widget.colind.add(i);
     }
+    refresh() {
+      setState(() {});
+    }
 
     return Container(
       child: Center(
@@ -40,6 +43,9 @@ class _NotesDispState extends State<NotesDisp> {
           widget.tcontrol.add(contr);
 
           handler(val) {
+            // print("before passing");
+            // print(i);
+            // print(val);
             widget.upd(i, val);
 // print(val);
           }
@@ -50,12 +56,35 @@ class _NotesDispState extends State<NotesDisp> {
               alignment: Alignment.center,
               margin: EdgeInsets.all(30),
               padding: EdgeInsets.all(20),
-              child: TextField(
-                autofocus: true,
-                controller: contr,
-                textAlign: TextAlign.justify,
-                textAlignVertical: TextAlignVertical.top,
-                onChanged: handler,
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  TextField(
+                    maxLines: null,
+                    // minLines: null,
+                    // expands: true,
+                    autofocus: true,
+                    controller: contr,
+                    textAlign: TextAlign.justify,
+                    textAlignVertical: TextAlignVertical.top,
+                    onChanged: handler,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        // print("printed");
+                        widget.tcontrol.remove(contr);
+                        print(widget.col.length);
+                        widget.col.removeAt(i);
+                        // print("LINE 75");
+                        widget.colind.removeLast();
+                        // print("LINE 77");
+                        handler('');
+                        // print("handler complete");
+                        refresh();
+                        // print("REFREESH");
+                      },
+                      icon: Icon(Icons.delete)),
+                ],
               ));
         }).toList(),
       )),

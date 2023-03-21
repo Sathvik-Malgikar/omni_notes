@@ -38,7 +38,7 @@ void updatefirebasedb(col) async {
   toast("All changes saved!");
   print("update called");
   print(MyApp.username);
-  print(col);
+  // print(col);
   if (kIsWeb || !Platform.isWindows) {
     // FirebaseDatabase inst = FirebaseDatabase.instance;
     // DatabaseReference ref = inst.ref("notes");
@@ -222,6 +222,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   updatenote(ind, val) {
+  // print(col);
+    if(val==''){
+
+setState(() {
+  // print("LINE 228");
+      // col.removeAt(ind);
+
+});
+      
+    }else
     col[ind] = val;
     if (timerset) timer.cancel();
     timer = Timer(Duration(seconds: 2), () {
@@ -235,7 +245,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // print("inmain");
-    print(col);
+    // print(col);
     Widget refreshwidg = NotesDisp(col: col, upd: updatenote);
     return Scaffold(
       appBar: AppBar(
