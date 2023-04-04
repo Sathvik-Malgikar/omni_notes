@@ -34,8 +34,8 @@ void main() async {
 //       {"id": id, "password": password, "username": username};
 // }
 
-void updatefirebasedb(col) async {
-  toast("All changes saved!");
+void updatefirebasedb(col,context) async {
+  toast("All changes saved!",context);
   print("update called");
   print(MyApp.username);
   // print(col);
@@ -193,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Future fut = check(val, pwd);
     fut.then(((resp) {
       if (resp == 1) {
-        toast("Welcome back, $val !");
+        toast("Welcome back, $val !",context);
         setState(() {
           MyApp.username = val;
         });
@@ -205,9 +205,9 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         });
       } else if (resp == 2) {
-        toast("incorrect password");
+        toast("incorrect password",context);
       } else {
-        toast("error connecting to database!");
+        toast("error connecting to database!",context);
         print(kIsWeb);
         if (!kIsWeb) print(Platform.isWindows);
       }
@@ -235,7 +235,7 @@ setState(() {
     col[ind] = val;
     if (timerset) timer.cancel();
     timer = Timer(Duration(seconds: 2), () {
-      updatefirebasedb(col);
+      updatefirebasedb(col,context);
 
       timerset = false;
     });
@@ -270,7 +270,7 @@ setState(() {
                           padding: EdgeInsets.all(20),
                           child: TextButton.icon(
                               onPressed: () {
-                                updatefirebasedb(col);
+                                updatefirebasedb(col,context);
                               },
                               icon: Icon(Icons.save),
                               label: Text("save")),

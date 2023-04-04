@@ -5,7 +5,7 @@ import "package:fluttertoast/fluttertoast.dart";
 import "package:flutter/foundation.dart" show kIsWeb;
 import "dart:io" show Platform;
 
-toast(msgt) {
+toast(msgt,context){
 
 
   if(kIsWeb || !Platform.isWindows)
@@ -19,6 +19,12 @@ toast(msgt) {
       backgroundColor: const Color.fromARGB(255, 86, 75, 247),
       textColor: Colors.white,
       fontSize: 16.0);
-  }
+  }else{
+       final Snkbar = SnackBar(content: Text(msgt),
+    
+    );
 
+    ScaffoldMessenger.of(context).showSnackBar(Snkbar);
+  }
 }
+

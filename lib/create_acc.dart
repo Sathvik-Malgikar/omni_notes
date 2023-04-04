@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:flutter/foundation.dart';
+
+
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
 import "toast.dart";
@@ -11,7 +12,7 @@ class CreateAcc extends StatelessWidget {
 
   var login;
   LocalStorage locstor = new LocalStorage("past");
-  checklocstor(){
+  checklocstor(context){
 
   Future fut = locstor.ready;
 
@@ -21,7 +22,7 @@ class CreateAcc extends StatelessWidget {
     if(resp!=null){
       username=resp["username"];
       password=resp["password"];
-      submit();
+      submit(context);
     }
 
   });
@@ -40,9 +41,9 @@ class CreateAcc extends StatelessWidget {
     password = val;
   }
 
-  submit() {
+  submit(context) {
     if (username == '' || password == '') {
-      toast("enter valid details.");
+      toast("enter valid details.",context);
       return;
     }
     login(username, password);
@@ -57,7 +58,7 @@ class CreateAcc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    checklocstor();
+    checklocstor(context);
     return Center(
         child: Container(
       child: RawKeyboardListener(
@@ -65,7 +66,7 @@ class CreateAcc extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            const Text("Enter username and password."),
+            const Text("Enter Username and Password."),
             Container(
               width: MediaQuery.of(context).size.width / 3,
               child: TextField(
@@ -84,7 +85,9 @@ class CreateAcc extends StatelessWidget {
               color: Colors.yellow,
             ),
             TextButton(
-                onPressed: submit,
+                onPressed: () {
+                  submit(context);
+                },
                 style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.white),
                     backgroundColor: MaterialStateProperty.all(Colors.yellow)),
@@ -95,7 +98,7 @@ class CreateAcc extends StatelessWidget {
       focusNode: FocusNode(),
       onKey: (event) {
       if(event.isKeyPressed(LogicalKeyboardKey.enter))
-      submit();
+      submit(context);
       },
       ),
     ));
